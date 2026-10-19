@@ -39,10 +39,7 @@ docker compose up --build
 Open **http://localhost:3000**. The first start migrates the database and loads demo data. Stop with `Ctrl+C`;
 `docker compose down -v` also deletes the database volume (a clean slate).
 
-> The Dockerfile/compose file were written and their commands were verified step by step outside Docker
-> (migrate → seed → start from the compiled `dist/`, API and standalone worker), but `docker compose up` itself has
-> Docker Compose was tested locally on Windows. The API, PostgreSQL database, and worker started successfully. The demo login worked, all 29 backend tests passed, and both Playwright browser test suites passed.
-
+> **Verified locally on Windows:** `docker compose up --build` started PostgreSQL, the API, and the worker successfully. The demo login worked, all 29 backend tests passed, and both Playwright browser test suites passed.
 ### Option B — Node + PostgreSQL on your machine (works on Windows, macOS, Linux)
 
 1. Install Node.js 22+ (`node -v`) and PostgreSQL 16. Create the database (default connection is
