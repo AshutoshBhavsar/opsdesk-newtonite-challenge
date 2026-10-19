@@ -26,7 +26,6 @@ Honest list of what is missing or weak, followed by what happens when things fai
   someone else" banner (the server side of each is tested).
 - The UI was exercised in **Chromium only**, at three widths (1280, 820, 390 px). It was not tried in Firefox or Safari, on a physical phone or
   tablet, or with a screen reader. Colours were chosen for contrast, but no automated contrast audit was run.
-- Docker files have not been executed by the author (their commands were verified individually).
 - No load test beyond the single-request timings in [PERFORMANCE.md](PERFORMANCE.md); concurrency was tested at 20 simultaneous claimers, not hundreds.
 
 ## Failure scenarios
