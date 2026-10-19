@@ -1,0 +1,39 @@
+{
+  "name": "opsdesk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OpsDesk: internal operations work-item tracker (Newtonite Software Engineering Challenge)",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "npm run build:server && npm run build:web",
+    "build:server": "tsc -p tsconfig.json",
+    "build:web": "node scripts/build-web.mjs",
+    "start": "node dist/server/main.js",
+    "start:worker": "node dist/server/worker/main.js",
+    "dev": "node --import tsx --watch src/server/main.ts --worker",
+    "migrate": "node --import tsx src/server/scripts/migrate.ts",
+    "seed": "node --import tsx src/server/scripts/seed.ts",
+    "seed:large": "node --import tsx src/server/scripts/seed.ts --large",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test --test-concurrency=4 test/*.test.ts",
+    "test:e2e": "node test/e2e/ui-smoke.mjs",
+    "test:e2e:ui": "node test/e2e/ui-redesign.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.13.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "esbuild": "^0.28.0",
+    "playwright": "^1.64.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

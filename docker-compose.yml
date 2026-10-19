@@ -1,0 +1,44 @@
+# One command: docker compose up --build   ->  http://localhost:3000
+# Three services: db (PostgreSQL 16), api (HTTP + SSE), worker (outbox + stale scan; separate process = separate failure domain).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: opsdesk
+    ports:
+      - "55432:5432"          # lets you also run the app / tests from your host machine
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d opsdesk"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/opsdesk
+      PORT: "3000"
+      COOKIE_SECURE: "false"   # set to "true" when served over HTTPS
+    ports:
+      - "3000:3000"
+    # migrate -> seed demo data (skipped automatically if users already exist) -> start the API (which also migrates, harmlessly)
+    command: ["sh", "-c", "node dist/server/scripts/migrate.js && node dist/server/scripts/seed.js && node dist/server/main.js"]
+
+  worker:
+    build: .
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/opsdesk
+    command: ["node", "dist/server/worker/main.js"]
+
+volumes:
+  dbdata:
